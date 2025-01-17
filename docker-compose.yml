@@ -22,7 +22,7 @@ services:
       context: ./client
       dockerfile: Dockerfile
     ports:
-      - "8080:80"
+      - "80:80"
     volumes:
       - ./client:/app
       - /app/node_modules
@@ -50,7 +50,7 @@ services:
   nginx:
     image: nginx:alpine
     ports:
-      - "80:80"
+      - "8080:80"
     depends_on:
       - client
       - server
