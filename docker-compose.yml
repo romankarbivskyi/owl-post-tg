@@ -23,8 +23,6 @@ services:
       dockerfile: Dockerfile
     ports:
       - "8080:80"
-    env_file:
-      - ./client/.env
     volumes:
       - ./client:/app
       - /app/node_modules
