@@ -69,6 +69,8 @@ Example: "/sendall -p <url> -m <your message>"
 
     const users = await UserService.getAllUsers();
 
+    let counter: number = 0;
+
     for (const user of users) {
       try {
         if (isPhoto) {
@@ -76,17 +78,24 @@ Example: "/sendall -p <url> -m <your message>"
             parse_mode: "Markdown",
             caption: message,
           });
+
+          counter += 1;
           return;
         }
         await bot.sendMessage(parseInt(user.tgId), message, {
           parse_mode: "Markdown",
         });
+
+        counter += 1;
       } catch (err) {
         console.error(err);
       }
     }
 
-    await bot.sendMessage(chatId, "Sending completed");
+    await bot.sendMessage(
+      chatId,
+      `Sending completed. Sent to ${counter} users`,
+    );
   } else if (msgText == "/stats") {
     try {
       const numberOfUsers = (await UserService.getAllUsers()).length;
