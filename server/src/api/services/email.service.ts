@@ -13,6 +13,13 @@ export class EmailService {
       throw ApiError.NotFound("User not found");
     }
 
+    const userEmailsLength = (await this.getEmails(userId)).length;
+    if (userEmailsLength == 25) {
+      throw ApiError.BadRequest(
+        "The limit is 25 mailboxes. To add more, delete unnecessary ones",
+      );
+    }
+
     const res = await API.post<
       Omit<IEmail, "user">,
       AxiosResponse<Omit<IEmail, "user">>
@@ -102,7 +109,7 @@ export class EmailService {
   }
 
   static getEmails(userId: string) {
-    return Email.find<HydratedDocument<IEmail>[]>({ user: userId });
+    return Email.find<HydratedDocument<IEmail>[]>({ user: userId }).exec();
   }
 
   static async getMessage(id: string): Promise<Message> {

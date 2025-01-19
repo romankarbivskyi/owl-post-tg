@@ -44,7 +44,6 @@ export class EmailController {
       }
 
       const { name, domain } = req.body;
-      console.log(name, domain);
       const userId = (req as any).user.tgId;
       const response = await EmailService.createEmail(name, domain, userId);
 
