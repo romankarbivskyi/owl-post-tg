@@ -17,8 +17,8 @@ export default function MessagePage() {
   const { id } = useParams<{ id: string }>();
   const { isLoading, isError, data } = useMessage(id);
 
-  const { subject, from, body_html, attachments, created_at } = (data ||
-    {}) as Message;
+  const { subject, from, body_html, body_text, attachments, created_at } =
+    (data || {}) as Message;
 
   const [windowSize, setWindowSize] = useState({
     width: window.innerWidth,
@@ -82,12 +82,16 @@ export default function MessagePage() {
       <CardContent className="space-y-4 px-6 overflow-auto">
         <div>
           <span className="font-semibold">{subject}</span>
-          <iframe
-            srcDoc={body_html}
-            height={windowSize.height}
-            width={windowSize.width}
-            className="break-words"
-          ></iframe>
+          {body_html.includes("<body") ? (
+            <iframe
+              srcDoc={body_html}
+              height={windowSize.height}
+              width={windowSize.width}
+              className="break-words"
+            ></iframe>
+          ) : (
+            <div className="text-pretty break-words">{body_text}</div>
+          )}
         </div>
       </CardContent>
       {attachments.length > 0 ? (
