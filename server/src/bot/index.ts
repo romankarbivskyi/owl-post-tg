@@ -16,38 +16,50 @@ bot.on("message", async (msg) => {
   if (!msgText) return;
 
   if (msgText.startsWith("/start")) {
-    await UserService.authUser({
-      tgId: chatId.toString(),
-    } as HydratedDocument<IUser>);
+    try {
+      await UserService.authUser({
+        tgId: chatId.toString(),
+      } as HydratedDocument<IUser>);
 
-    await bot.sendMessage(
-      chatId,
-      `
+      await bot.sendMessage(
+        chatId,
+        `
 🦉 Welcome to Owl Post!
 Tap "Open" below to start managing your temporary emails. 💌
     `,
-    );
+      );
+    } catch (err) {
+      console.log(err);
+    }
   } else if (msgText == "/sendall") {
-    await bot.sendMessage(
-      chatId,
-      `
+    try {
+      await bot.sendMessage(
+        chatId,
+        `
 Type "/sendall -m <your message>"
 Flags: 
   * m - message;
   * p - photo (optional).
 Example: "/sendall -p <url> -m <your message>"
     `,
-    );
-  } else if (msgText.startsWith("/sendall")) {
-    const existUser = await UserService.getUser(chatId.toString());
-    if (!existUser) {
-      await bot.sendMessage(chatId, "User not found");
-      return;
+      );
+    } catch (err) {
+      console.error(err);
     }
+  } else if (msgText.startsWith("/sendall")) {
+    try {
+      const existUser = await UserService.getUser(chatId.toString());
+      if (!existUser) {
+        await bot.sendMessage(chatId, "User not found");
+        return;
+      }
 
-    if (existUser.role != UserRole.ADMIN) {
-      await bot.sendMessage(chatId, "Access denied");
-      return;
+      if (existUser.role != UserRole.ADMIN) {
+        await bot.sendMessage(chatId, "Access denied");
+        return;
+      }
+    } catch (err) {
+      console.error(err);
     }
 
     const isPhoto = msgText.includes("-p");
@@ -75,5 +87,12 @@ Example: "/sendall -p <url> -m <your message>"
     }
 
     await bot.sendMessage(chatId, "Sending completed");
+  } else if (msgText == "/stats") {
+    try {
+      const numberOfUsers = (await UserService.getAllUsers()).length;
+      await bot.sendMessage(chatId, `📊 Number of users: ${numberOfUsers}`);
+    } catch (err) {
+      console.error(err);
+    }
   }
 });
