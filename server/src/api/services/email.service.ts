@@ -13,7 +13,8 @@ export class EmailService {
       throw ApiError.NotFound("User not found");
     }
 
-    const userEmailsLength = (await this.getEmails(userId)).length;
+    const userEmailsLength = (await this.getEmails(existUser._id.toString()))
+      .length;
     if (userEmailsLength == 25) {
       throw ApiError.BadRequest(
         "The limit is 25 mailboxes. To add more, delete unnecessary ones",
