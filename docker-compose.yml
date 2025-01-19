@@ -1,7 +1,6 @@
-version: '3.8'
-
 services:
   mongo:
+    container_name: mongo
     image: mongo:7.0
     ports:
       - "27017:27017"
@@ -16,8 +15,8 @@ services:
     command: [--auth]
     networks:
       - app-network
-
   client:
+    container_name: client
     build:
       context: ./client
       dockerfile: Dockerfile
@@ -30,8 +29,8 @@ services:
       - server
     networks:
       - app-network
-
   server:
+    container_name: server
     build:
       context: ./server
       dockerfile: Dockerfile
@@ -46,8 +45,8 @@ services:
       - mongo
     networks:
       - app-network
-
   nginx:
+    container_name: nginx
     image: nginx:alpine
     ports:
       - "80:80"
