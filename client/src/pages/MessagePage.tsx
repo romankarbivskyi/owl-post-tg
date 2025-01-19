@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useMessage } from "@/hooks/useMessage.ts";
 import { Separator } from "@/components/ui/separator.tsx";
 import {
@@ -12,10 +12,12 @@ import { Skeleton } from "@/components/ui/skeleton";
 import Attachments from "@/components/Attachments.tsx";
 import { Message } from "@/types";
 import { useEffect, useState } from "react";
+import WebApp from "@twa-dev/sdk";
 
 export default function MessagePage() {
   const { id } = useParams<{ id: string }>();
   const { isLoading, isError, data } = useMessage(id);
+  const navigate = useNavigate();
 
   const { subject, from, body_html, body_text, attachments, created_at } =
     (data || {}) as Message;
@@ -24,6 +26,14 @@ export default function MessagePage() {
     width: window.innerWidth,
     height: window.innerHeight,
   });
+
+  useEffect(() => {
+    WebApp.BackButton.onClick(() => {
+      navigate("/");
+      WebApp.BackButton.hide();
+    });
+    WebApp.BackButton.show();
+  }, [navigate]);
 
   useEffect(() => {
     const handleResize = () => {
