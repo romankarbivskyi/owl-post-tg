@@ -111,7 +111,7 @@ export default function HomePage(): JSX.Element | null {
   return (
     <div>
       <div className="p-5">
-        <div className="flex items-center gap-2">
+        <div className="sticky top-0 flex items-center gap-2 bg-background py-2">
           <Select
             value={currentEmail ?? ""}
             onValueChange={(value) => setCurrentEmail(value)}

@@ -8,6 +8,7 @@ import Modal from "@/components/Modal.tsx";
 
 export default function App() {
   useLayoutEffect(() => {
+    WebApp.expand();
     WebApp.setHeaderColor("#09090B");
     WebApp.setBottomBarColor("#09090B");
     WebApp.setBackgroundColor("#09090B");
